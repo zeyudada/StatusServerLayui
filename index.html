@@ -13,20 +13,11 @@
   <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
   <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
 <![endif]-->
-    <link rel="stylesheet" href="/layui/css/layui.css" />
-    <link id="layui_theme_css" href="" rel="stylesheet">
-    <style>
-        .collapse {
-            text-align: center;
-        }
-
-        .layui-progress-text {
-            color: #000;;
-        }
-    </style>
+    <link rel="stylesheet" href="layui/css/layui.css" />
+    <link id="layui_theme_css" href="css/light.css" rel="stylesheet">
 </head>
 
-<body style="background: #ebebeb url(../img/light.png);">
+<body>
     <div class="layui-hide">
         <h3>您不应该看到此提示，如果看到此提示说明您未能正确加载网站依赖，请启用js或换用其他浏览器</h3>
     </div>
@@ -52,8 +43,8 @@
                     <table class="layui-table" lay-even lay-skin="line" lay-size="sm">
                         <thead>
                             <tr>
-                                <th id="online_status" style="text-align: center;">🔗协议</th>
-                                <th id="month_traffic" style="text-align: center;">📊月流量↓|↑</th>
+                                <th id="online_status">🔗协议</th>
+                                <th id="month_traffic">📊月流量↓|↑</th>
                                 <th id="name">📌节点</th>
                                 <th id="type">🗂️虚拟化</th>
                                 <th id="location">🌍位置</th>
@@ -64,7 +55,7 @@
                                 <th id="cpu">🎯核芯</th>
                                 <th id="ram">⚡️内存</th>
                                 <th id="hdd">💾硬盘</th>
-                                <th id="ping" lay-data="{field:'ping', width:150}">🌐CU|CT|CM</th>
+                                <th id="ping">🌐CU|CT|CM</th>
                             </tr>
                         </thead>
                         <tbody id="servers">
@@ -84,6 +75,6 @@
             </div>
         </div>
     </div>
-    <script src="/layui/layui.js"></script>
-    <script src="/js/serverstatus.js"></script>
+    <script src="layui/layui.js"></script>
+    <script src="js/serverstatus.js"></script>
 </body>
