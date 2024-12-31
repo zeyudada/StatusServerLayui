@@ -1,5 +1,5 @@
 
-var $ = layui.jquery, layer = layui.layer, element = layui.element;
+var $ = layui.jquery, layer = layui.layer, element = layui.element, util = layui.util;
 // serverstatus.js. big data boom today.
 var error = 0;
 var d = 0;
@@ -7,17 +7,6 @@ var server_status = new Array();
 var online = 0;
 var offline = 0;
 
-function timeSince(date) {
-	if (date == 0)
-		return "从未.";
-
-	var seconds = Math.floor((new Date() - date) / 1000);
-	var interval = Math.floor(seconds / 60);
-	if (interval > 1)
-		return interval + " 分钟前.";
-	else
-		return "几秒前.";
-}
 
 function bytesToSize(bytes, precision, si) {
 	var ret;
@@ -52,7 +41,7 @@ function bytesToSize(bytes, precision, si) {
 	}*/
 }
 
-$.fn.alterClass = function (removals, additions) {
+$.fn.removeClass = function (removals, additions) {
 
 	var self = this;
 
@@ -108,9 +97,9 @@ function uptime() {
 							"<td id='load'>加载中</td>" +
 							"<td id='network'>加载中</td>" +
 							"<td id='traffic'>加载中</td>" +
-							"<td id='cpu'><div class='layui-progress layui-progress-big' lay-showpercent='true'><div style='width: 100%;' class='layui-progress-bar layui-bg-orange'><small>加载中</small></div></div></td>" +
-							"<td id='memory'><div class='layui-progress layui-progress-big' lay-showpercent='true'><div style='width: 100%;' class='layui-progress-bar layui-bg-orange'><small>加载中</small></div></div></td>" +
-							"<td id='hdd'><div class='layui-progress layui-progress-big' lay-showpercent='true'><div style='width: 100%;' class='layui-progress-bar layui-bg-orange'><small>加载中</small></div></div></td>" +
+							"<td id='cpu'><div class='layui-progress layui-progress-big'><div lay-percent='100%' class='layui-progress-bar layui-bg-orange'><small>加载中</small></div></div></td>" +
+							"<td id='memory'><div class='layui-progress layui-progress-big'><div lay-percent='100%' class='layui-progress-bar layui-bg-orange'><small>加载中</small></div></div></td>" +
+							"<td id='hdd'><div class='layui-progress layui-progress-big'><div lay-percent='100%' class='layui-progress-bar layui-bg-orange'><small>加载中</small></div></div></td>" +
 							"<td id='ping'><div class='layui-badge'>加载中</div></td>"
 					}),
 					$("<tr>", {
@@ -138,16 +127,16 @@ function uptime() {
 			// online_status
 			if (result.servers[i].online4 && !result.servers[i].online6) {
 				online += 1;
-				$(TableRow).find("#online_status .layui-badge").alterClass("layui-bg-*").addClass("layui-bg-green").text("IPv4");
+				$(TableRow).find("#online_status .layui-badge").removeClass("layui-bg-*").addClass("layui-bg-green").text("IPv4");
 			} else if (result.servers[i].online4 && result.servers[i].online6) {
 				online += 1;
-				$(TableRow).find("#online_status .layui-badge").alterClass("layui-bg-*").addClass("layui-bg-green").text("双栈");
+				$(TableRow).find("#online_status .layui-badge").removeClass("layui-bg-*").addClass("layui-bg-green").text("双栈");
 			} else if (!result.servers[i].online4 && result.servers[i].online6) {
 				online += 1;
-				$(TableRow).find("#online_status .layui-badge").alterClass("layui-bg-*").addClass("layui-bg-green").text("IPv6");
+				$(TableRow).find("#online_status .layui-badge").removeClass("layui-bg-*").addClass("layui-bg-green").text("IPv6");
 			} else {
 				offline += 1;
-				$(TableRow).find("#online_status .layui-badge").alterClass("layui-bg-*").addClass("layui-bg-red").text("关闭");
+				$(TableRow).find("#online_status .layui-badge").removeClass("layui-bg-*").addClass("layui-bg-red").text("关闭");
 			}
 
 			// Name
@@ -164,11 +153,11 @@ function uptime() {
 					$(TableRow).find("#load").text("–");
 					$(TableRow).find("#network").text("–");
 					$(TableRow).find("#traffic").text("–");
-					$(TableRow).find("#month_traffic .layui-badge").alterClass("layui-bg-*").addClass("layui-bg-orange").text("关闭");
-					$(TableRow).find("#cpu .layui-progress-bar").alterClass("layui-bg-*").addClass("layui-bg-red").css("width", "100%").html('<span class="layui-progress-text">关闭</span>');
-					$(TableRow).find("#memory .layui-progress-bar").alterClass("layui-bg-*").addClass("layui-bg-red").css("width", "100%").html('<span class="layui-progress-text">关闭</span>');
-					$(TableRow).find("#hdd .layui-progress-bar").alterClass("layui-bg-*").addClass("layui-bg-red").css("width", "100%").html('<span class="layui-progress-text">关闭</span>');
-					$(TableRow).find("#ping .layui-badge").alterClass("layui-bg-*").addClass("layui-bg-red").text("关闭");
+					$(TableRow).find("#month_traffic .layui-badge").removeClass("layui-bg-*").addClass("layui-bg-orange").text("关闭");
+					$(TableRow).find("#cpu .layui-progress-bar").removeClass("layui-bg-*").addClass("layui-bg-red").attr("lay-percent", "100%").html('<span class="layui-progress-text">关闭</span>');
+					$(TableRow).find("#memory .layui-progress-bar").removeClass("layui-bg-*").addClass("layui-bg-red").attr("lay-percent", "100%").html('<span class="layui-progress-text">关闭</span>');
+					$(TableRow).find("#hdd .layui-progress-bar").removeClass("layui-bg-*").addClass("layui-bg-red").attr("lay-percent", "100%").html('<span class="layui-progress-text">关闭</span>');
+					$(TableRow).find("#ping .layui-badge").removeClass("layui-bg-*").addClass("layui-bg-red").text("关闭");
 					$($(TableRow).attr("data-target")).parent().slideUp();
 					$(TableRow).attr("data-target", "");
 					server_status[i] = false;
@@ -192,7 +181,7 @@ function uptime() {
 					monthtraffic += (trafficdiff_out / 1024 / 1024 / 1024).toFixed(1) + "G";
 				else
 					monthtraffic += (trafficdiff_out / 1024 / 1024 / 1024 / 1024).toFixed(1) + "T";
-				$(TableRow).find("#month_traffic .layui-badge").alterClass("layui-bg-*").addClass("layui-bg-green").html("<small>" + monthtraffic + "</small>");
+				$(TableRow).find("#month_traffic .layui-badge").removeClass("layui-bg-*").addClass("layui-bg-green").html("<small>" + monthtraffic + "</small>");
 
 				// Uptime
 				$(TableRow).find("#uptime").text(result.servers[i].uptime);
@@ -232,34 +221,34 @@ function uptime() {
 
 				// CPU
 				if (result.servers[i].cpu >= 90)
-					$(TableRow).find("#cpu .layui-progress-bar").alterClass("layui-bg-*").addClass("layui-bg-red");
+					$(TableRow).find("#cpu .layui-progress-bar").removeClass("layui-bg-*").addClass("layui-bg-red");
 				else if (result.servers[i].cpu >= 80)
-					$(TableRow).find("#cpu .layui-progress-bar").alterClass("layui-bg-*").addClass("layui-bg-orange");
+					$(TableRow).find("#cpu .layui-progress-bar").removeClass("layui-bg-*").addClass("layui-bg-orange");
 				else
-					$(TableRow).find("#cpu .layui-progress-bar").alterClass("layui-bg-*").addClass("layui-bg-green");
-				$(TableRow).find("#cpu .layui-progress-bar").css("width", result.servers[i].cpu + "%").html('<span class="layui-progress-text">' + result.servers[i].cpu + "%</span>");
+					$(TableRow).find("#cpu .layui-progress-bar").removeClass("layui-bg-*").addClass("layui-bg-green");
+				$(TableRow).find("#cpu .layui-progress-bar").attr("lay-percent", result.servers[i].cpu + "%").html('<span class="layui-progress-text">' + result.servers[i].cpu + "%</span>");
 
 				// Memory
 				var Mem = ((result.servers[i].memory_used / result.servers[i].memory_total) * 100.0).toFixed(0);
 				if (Mem >= 90)
-					$(TableRow).find("#memory .layui-progress-bar").alterClass("layui-bg-*").addClass("layui-bg-red");
+					$(TableRow).find("#memory .layui-progress-bar").removeClass("layui-bg-*").addClass("layui-bg-red");
 				else if (Mem >= 80)
-					$(TableRow).find("#memory .layui-progress-bar").alterClass("layui-bg-*").addClass("layui-bg-orange");
+					$(TableRow).find("#memory .layui-progress-bar").removeClass("layui-bg-*").addClass("layui-bg-orange");
 				else
-					$(TableRow).find("#memory .layui-progress-bar").alterClass("layui-bg-*").addClass("layui-bg-green");
-				$(TableRow).find("#memory .layui-progress-bar").css("width", Mem + "%").html('<span class="layui-progress-text">' + Mem + "%</span>");
+					$(TableRow).find("#memory .layui-progress-bar").removeClass("layui-bg-*").addClass("layui-bg-green");
+				$(TableRow).find("#memory .layui-progress-bar").attr("lay-percent", Mem + "%").html('<span class="layui-progress-text">' + Mem + "%</span>");
 				// 内存|swap
 				$(ExpandRow).find("#expand_mem").html("内存|虚存:" + bytesToSize(result.servers[i].memory_used * 1024, 1) + " / " + bytesToSize(result.servers[i].memory_total * 1024, 1) + " | " + bytesToSize(result.servers[i].swap_used * 1024, 0) + " / " + bytesToSize(result.servers[i].swap_total * 1024, 0));
 
 				// HDD
 				var HDD = ((result.servers[i].hdd_used / result.servers[i].hdd_total) * 100.0).toFixed(0);
 				if (HDD >= 90)
-					$(TableRow).find("#hdd .layui-progress-bar").alterClass("layui-bg-*").addClass("layui-bg-red");
+					$(TableRow).find("#hdd .layui-progress-bar").removeClass("layui-bg-*").addClass("layui-bg-red");
 				else if (HDD >= 80)
-					$(TableRow).find("#hdd .layui-progress-bar").alterClass("layui-bg-*").addClass("layui-bg-orange");
+					$(TableRow).find("#hdd .layui-progress-bar").removeClass("layui-bg-*").addClass("layui-bg-orange");
 				else
-					$(TableRow).find("#hdd .layui-progress-bar").alterClass("layui-bg-*").addClass("layui-bg-green");
-				$(TableRow).find("#hdd .layui-progress-bar").css("width", HDD + "%").html('<span class="layui-progress-text">' + HDD + "%</span>");
+					$(TableRow).find("#hdd .layui-progress-bar").removeClass("layui-bg-*").addClass("layui-bg-green");
+				$(TableRow).find("#hdd .layui-progress-bar").attr("lay-percent", HDD + "%").html('<span class="layui-progress-text">' + HDD + "%</span>");
 				// IO Speed for HDD.
 				// IO， 过小的B字节单位没有意义
 				var io = "";
@@ -288,11 +277,11 @@ function uptime() {
 				$(ExpandRow).find("#expand_lost").html("丢包：联通/电信/移动: " + PING_10010 + "% / " + PING_189 + "% / " + PING_10086 + "%");
 
 				if (PING_10010 >= 20 || PING_189 >= 20 || PING_10086 >= 20)
-					$(TableRow).find("#ping .layui-badge").alterClass("layui-bg-*").addClass("layui-bg-red");
+					$(TableRow).find("#ping .layui-badge").removeClass("layui-bg-*").addClass("layui-bg-red");
 				else if (PING_10010 >= 10 || PING_189 >= 10 || PING_10086 >= 10)
-					$(TableRow).find("#ping .layui-badge").alterClass("layui-bg-*").addClass("layui-bg-orange");
+					$(TableRow).find("#ping .layui-badge").removeClass("layui-bg-*").addClass("layui-bg-orange");
 				else
-					$(TableRow).find("#ping .layui-badge").alterClass("layui-bg-*").addClass("layui-bg-green");
+					$(TableRow).find("#ping .layui-badge").removeClass("layui-bg-*").addClass("layui-bg-green");
 				$(TableRow).find("#ping .layui-badge").html(PING_10010 + "%💻" + PING_189 + "%💻" + PING_10086 + "%");
 
 				// Custom
@@ -306,22 +295,22 @@ function uptime() {
 
 		d = new Date(result.updated * 1000);
 		error = 0;
-		$("#updated").html("总计" + result.servers.length + "台 在线" + online + "台 离线" + offline + "台，最后更新: " + timeSince(d));
+		$("#updated").html("总计" + result.servers.length + "台 在线" + online + "台 离线" + offline + "台，最后更新: " + util.timeAgo(d));
 	}).fail(function (update_error) {
 		if (!error) {
 			$("#servers > tr.accordion-toggle").each(function (i) {
 				var TableRow = $("#servers tr#r" + i)[0];
 				var ExpandRow = $("#servers #rt" + i);
-				$(TableRow).find("#online_status .layui-badge").alterClass("layui-bg-*").addClass("layui-bg-red").text("错误");
-				$(TableRow).find("#month_traffic .layui-badge").alterClass("layui-bg-*").addClass("layui-bg-red").text("错误");
+				$(TableRow).find("#online_status .layui-badge").removeClass("layui-bg-*").addClass("layui-bg-red").text("错误");
+				$(TableRow).find("#month_traffic .layui-badge").removeClass("layui-bg-*").addClass("layui-bg-red").text("错误");
 				$(TableRow).find("#uptime").html("<div class='layui-badge'>错误</div>");
 				$(TableRow).find("#load").html("<div class='layui-badge'>错误</div>");
 				$(TableRow).find("#network").html("<div class='layui-badge'>错误</div>");
 				$(TableRow).find("#traffic").html("<div class='layui-badge'>错误</div>");
-				$(TableRow).find("#cpu .layui-progress-bar").alterClass("layui-bg-*").addClass("layui-bg-red").css("width", "100%").html('<span class="layui-progress-text">错误</span>');
-				$(TableRow).find("#memory .layui-progress-bar").alterClass("layui-bg-*").addClass("layui-bg-red").css("width", "100%").html('<span class="layui-progress-text">错误</span>');
-				$(TableRow).find("#hdd .layui-progress-bar").alterClass("layui-bg-*").addClass("layui-bg-red").css("width", "100%").html('<span class="layui-progress-text">错误</span>');
-				$(TableRow).find("#ping .layui-badge").alterClass("layui-bg-*").addClass("layui-bg-red").text("错误");
+				$(TableRow).find("#cpu .layui-progress-bar").removeClass("layui-bg-*").addClass("layui-bg-red").attr("lay-percent", "100%").html('<span class="layui-progress-text">错误</span>');
+				$(TableRow).find("#memory .layui-progress-bar").removeClass("layui-bg-*").addClass("layui-bg-red").attr("lay-percent", "100%").html('<span class="layui-progress-text">错误</span>');
+				$(TableRow).find("#hdd .layui-progress-bar").removeClass("layui-bg-*").addClass("layui-bg-red").attr("lay-percent", "100%").html('<span class="layui-progress-text">错误</span>');
+				$(TableRow).find("#ping .layui-badge").removeClass("layui-bg-*").addClass("layui-bg-red").text("错误");
 				$($(TableRow).attr("data-target")).parent().slideUp();
 				$(TableRow).attr("data-target", "");
 				server_status[i] = false;
@@ -331,6 +320,7 @@ function uptime() {
 		$("#updated").html("更新错误.");
 	});
 
+	element.render('progress');
 }
 
 
